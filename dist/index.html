@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Farm Brief | Daily 3-Minute Farm Brief for UK Agriculture</title>
+    <meta name="description" content="Daily farming updates, weather risks, grants, prices and news for UK farmers">
+    <style>
+        :root {
+            --farm-green: #2d5a27;
+            --farm-brown: #8b7355;
+            --farm-sky: #87ceeb;
+            --alert-red: #dc2626;
+            --money-green: #16a34a;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            line-height: 1.6; 
+            color: #333;
+            background: #f5f5f4;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        
+        /* Header */
+        header { 
+            background: var(--farm-green); 
+            color: white; 
+            padding: 1.5rem 0;
+            border-bottom: 4px solid var(--farm-brown);
+        }
+        header h1 { font-size: 2rem; margin-bottom: 0.25rem; }
+        header p { opacity: 0.9; }
+        
+        /* Navigation */
+        nav { 
+            background: white; 
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 1rem; }
+        nav a { text-decoration: none; color: var(--farm-green); font-weight: 500; }
+        nav a:hover { text-decoration: underline; }
+        
+        /* Main Brief Section */
+        .brief-hero { 
+            background: linear-gradient(135deg, var(--farm-sky) 0%, #fff 100%);
+            padding: 2rem 0;
+            margin: 2rem 0;
+            border-radius: 8px;
+            border: 2px solid var(--farm-green);
+        }
+        .brief-hero h2 { 
+            color: var(--farm-green); 
+            font-size: 1.8rem; 
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        /* Grid */
+        .sections-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .section-card { 
+            background: white; 
+            padding: 1.5rem; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--farm-brown);
+        }
+        .section-card h3 { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--farm-green);
+        }
+        .section-card a { 
+            display: inline-block; 
+            margin-top: 1rem;
+            color: var(--farm-green);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Posts list */
+        .post-list { margin: 2rem 0; }
+        .post-item { 
+            background: white; 
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .post-item h4 { margin-bottom: 0.5rem; }
+        .post-item h4 a { color: var(--farm-green); text-decoration: none; }
+        .post-item .meta { color: #666; font-size: 0.9rem; }
+        
+        /* Brief specific */
+        .brief-section { 
+            background: #f0fdf4;
+            border-left: 4px solid var(--money-green);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .brief-section h4 { color: var(--farm-green); margin-bottom: 0.5rem; }
+        .brief-section ul { list-style: none; padding-left: 0; }
+        .brief-section li { padding: 0.25rem 0; }
+        
+        footer { 
+            background: var(--farm-green); 
+            color: white; 
+            text-align: center; 
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>UK Farm Brief</h1>
+            <p>Daily 3-Minute Farm Brief for UK Agriculture</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="briefs/index.html">🗞 Daily Brief</a></li>
+                <li><a href="weather.html">🌦 Weather</a></li>
+                <li><a href="grants.html">💰 Grants</a></li>
+                <li><a href="livestock.html">🐄 Livestock</a></li>
+                <li><a href="crops.html">🌾 Crops</a></li>
+                <li><a href="equipment.html">🚜 Equipment</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="container">
+
+    <div class="live-data-section" style="margin: 2rem 0;">
+        <h2 style="text-align: center; color: var(--farm-green); margin-bottom: 1.5rem;">
+            📊 Live Farm Data
+        </h2>
+        <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+            Updated hourly • Real-time prices & conditions
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+    </div></div>
+        <section class="brief-hero">
+            <h2>🗞 Today's Daily Farm Brief</h2>
+            <div class="brief-content">
+                <p># 📰 Daily Farm Brief – Tuesday, 24 February 2026</p>
+<p>> Your 3-minute roundup of today's important farming updates.</p>
+<p>---</p>
+<h2>🌧 Weather Risk</h2>
+<ul><li><strong>Scotland</strong>: Heavy rain expected across Highlands tomorrow</li>
+<li><strong>England</strong>: Frost warnings for East Midlands overnight</li>
+<li><strong>Wales</strong>: High winds (50mph) expected Friday</li>
+</ul>
+---
+<h2>💰 Grant Update</h2>
+<ul><li><strong>SFI</strong>: Payment schedule changes for Countryside Stewardship</li>
+<li><strong>RPA</strong>: New livestock unit calculation tool released</li>
+<li><strong>Farming Resilience Fund</strong>: Applications open until 15 March</li>
+</ul>
+---
+<h2>🐄 Livestock Alert</h2>
+<ul><li><strong>Disease</strong>: Enhanced foot-and-mouth monitoring notice (UK-wide)</li>
+<li><strong>Prices</strong>: Lamb prices up 8% on last week at auction</li>
+<li><strong>Dairy</strong>: Milk prices continue firm</li>
+</ul>
+---
+<h2>🚜 Equipment Deal</h2>
+<ul><li><strong>Fencing tools</strong>: 20% discount on stock fencing kits</li>
+<li><strong>Tractor servicing</strong>: Spring maintenance packages available</li>
+<li><strong>Livestock handling</strong>: New mobile crushes in stock</li>
+</ul>
+---
+<p>*Generated by AI • Sources: Met Office, DEFRA, AHDB, NFU, Farmers Weekly*</p>
+            </div>
+            <p style="text-align: center; margin-top: 1rem;">
+                <a href="posts/2026-02-24-daily-brief.html" style="color: var(--farm-green); font-weight: 500;">
+                    Read full brief →
+                </a>
+            </p>
+        </section>
+
+        <div class="sections-grid">
+            <div class="section-card">
+                <h3>🌦 Weather + Risk Alerts</h3>
+                <p>Regional weather forecasts, warnings, and agricultural impact analysis.</p>
+                <a href="weather.html">View weather →</a>
+            </div>
+            
+            <div class="section-card">
+                <h3>💰 Grants & Money Updates</h3>
+                <p>SFI payments, RPA updates, funding deadlines, and scheme changes.</p>
+                <a href="grants.html">View grants →</a>
+            </div>
+            
+            <div class="section-card">
+                <h3>🐄 Livestock Section</h3>
+                <p>Beef, lamb, dairy prices, disease alerts, and market trends.</p>
+                <a href="livestock.html">View livestock →</a>
+            </div>
+            
+            <div class="section-card">
+                <h3>🌾 Crop Section</h3>
+                <p>Cereal, oilseed, and pulse prices with agronomy updates.</p>
+                <a href="crops.html">View crops →</a>
+            </div>
+            
+            <div class="section-card">
+                <h3>🚜 Equipment & Tech</h3>
+                <p>Machinery reviews, tech updates, and equipment deals.</p>
+                <a href="equipment.html">View equipment →</a>
+            </div>
+            
+            <div class="section-card">
+                <h3>📅 Seasonal Checklist</h3>
+                <p>Year-round farming tasks and timing reminders.</p>
+                <a href="seasonal.html">View checklist →</a>
+            </div>
+        </div>
+        
+        <section class="post-list">
+            <h2>Recent Updates</h2>
+
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>UK Farm Brief • Generated 2026</p>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
+                Sources: Met Office, DEFRA, AHDB, NFU, Farmers Weekly
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

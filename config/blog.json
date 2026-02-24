@@ -1,0 +1,50 @@
+{
+  "site": {
+    "name": "UK Farm Brief",
+    "tagline": "Daily 3-Minute Farm Brief for UK Agriculture",
+    "url": "https://your-username.github.io/uk-farm-brief",
+    "timezone": "Europe/London",
+    "language": "en-GB",
+    "author": "AI Farm Assistant",
+    "description": "Daily farming updates, weather risks, grants, prices and news for UK farmers",
+    "postsPerDay": 1,
+    "publishTime": "06:00"
+  },
+  "brief": {
+    "format": "bullet",
+    "maxItemsPerCategory": 3,
+    "categories": [
+      "weather",
+      "grants",
+      "livestock",
+      "crops",
+      "equipment",
+      "policy",
+      "prices"
+    ],
+    "emoji": {
+      "weather": "🌧",
+      "grants": "💰",
+      "livestock": "🐄",
+      "crops": "🌾",
+      "equipment": "🚜",
+      "policy": "📋",
+      "prices": "💹",
+      "alert": "⚠️",
+      "deal": "🔥"
+    }
+  },
+  "rss_sources": {
+    "farmers_weekly": "https://www.fwi.co.uk/rss",
+    "ahdb": "https://ahdb.org.uk/news/rss",
+    "nfu": "https://nfuonline.com/news/rss",
+    "defra": "https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs.atom",
+    "rpa": "https://www.gov.uk/government/organisations/rural-payments-agency.atom"
+  },
+  "regions": [
+    {"name": "England", "lat": 52.3555, "lon": -1.1743},
+    {"name": "Scotland", "lat": 56.4907, "lon": -4.2026},
+    {"name": "Wales", "lat": 52.1307, "lon": -3.7837},
+    {"name": "Northern Ireland", "lat": 54.7877, "lon": -6.4923}
+  ]
+}
