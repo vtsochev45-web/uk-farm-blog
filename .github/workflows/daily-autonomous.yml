@@ -1,0 +1,52 @@
+name: Daily Autonomous Blog Post
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # 5am UTC daily
+  workflow_dispatch:  # Manual trigger for testing
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install feedparser requests
+      
+      - name: Run autonomous agent
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          python scripts/autonomous-agent.py
+      
+      - name: Check if new content was created
+        id: check-files
+        run: |
+          if [ -f "_posts/$(date +%Y-%m-d)*.md" ]; then
+            echo "new_post=true" >> $GITHUB_OUTPUT
+          else
+            echo "new_post=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit and push new post
+        if: steps.check-files.outputs.new_post == 'true'
+        run: |
+          git config user.name "Autonomous Agent"
+          git config user.email "agent@uk-farm-blog.com"
+          git add _posts/
+          git commit -m "📰 Auto-generated: Daily post $(date +%Y-%m-%d)"
+          git push origin main
+      
+      - name: Trigger site rebuild
+        if: steps.check-files.outputs.new_post == 'true'
+        run: |
+          curl -X POST "https://api.vercel.com/v1/integrations/deploy/${{ secrets.VERCEL_DEPLOY_HOOK }}" || true
+        continue-on-error: true
