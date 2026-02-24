@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Farm Brief - Live Data</title>
+    <style>
+        :root { --farm-green: #2d5a27; --alert: #dc2626; --money: #16a34a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, sans-serif; line-height: 1.6; background: #f5f5f4; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+        header { background: var(--farm-green); color: white; padding: 2rem; text-align: center; }
+        .widget { background: white; border-radius: 8px; padding: 1.5rem; margin: 1rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .widget h3 { color: var(--farm-green); margin-bottom: 1rem; }
+        button { background: var(--farm-green); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+        .loading { color: #666; }
+        .error { color: var(--alert); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚜 UK Farm Brief</h1>
+        <p>Live Weather, Prices & Grants</p>
+    </header>
+    <div class="container">
+        <div class="widget">
+            <h3>🌦 Weather</h3>
+            <div id="weather">Click refresh to load</div>
+            <button onclick="loadWeather()">Refresh Weather</button>
+        </div>
+        <div class="widget">
+            <h3>💰 Prices</h3>
+            <div id="prices">Click refresh to load</div>
+            <button onclick="loadPrices()">Refresh Prices</button>
+        </div>
+    </div>
+    <script>
+        async function loadWeather() {
+            document.getElementById('weather').innerHTML = '<div class="loading">Loading...</div>';
+            try {
+                const res = await fetch('/api/weather');
+                const data = await res.json();
+                let html = '';
+                for (const [r, w] of Object.entries(data.data)) {
+                    html += `<p><strong>${r}:</strong> ${w.temp}°C, ${w.condition}</p>`;
+                }
+                document.getElementById('weather').innerHTML = html;
+            } catch (e) {
+                document.getElementById('weather').innerHTML = '<div class="error">Error loading weather</div>';
+            }
+        }
+        async function loadPrices() {
+            document.getElementById('prices').innerHTML = '<div class="loading">Loading...</div>';
+            try {
+                const res = await fetch('/api/prices');
+                const data = await res.json();
+                let html = '';
+                for (const [item, p] of Object.entries(data.data)) {
+                    html += `<p><strong>${item}:</strong> ${p.price} ${p.unit}</p>`;
+                }
+                document.getElementById('prices').innerHTML = html;
+            } catch (e) {
+                document.getElementById('prices').innerHTML = '<div class="error">Error loading prices</div>';
+            }
+        }
+        // Auto-load on page load
+        loadWeather();
+        loadPrices();
+    </script>
+</body>
+</html>
