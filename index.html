@@ -201,8 +201,9 @@
             
             <div class="widget">
                 <h4>💡 Quick Tools</h4>
-                <button class="btn" style="margin-bottom: 0.5rem;">Grant Eligibility Checker</button>
-                <button class="btn" style="background: #3b82f6;">Fertilizer Calculator</button>
+                <button class="btn" onclick="showGrantChecker()" style="margin-bottom: 0.5rem;">Grant Eligibility Checker</button>
+                <button class="btn" onclick="showFertilizerCalc()" style="background: #3b82f6; margin-bottom: 0.5rem;">Fertilizer Calculator</button>
+                <div id="tool-output"></div>
             </div>
             
             <div class="widget">
@@ -272,6 +273,147 @@
         // Auto-load
         loadWeather();
         loadPrices();
+        
+        // Tool functions
+        function showFertilizerCalc() {
+            const output = document.getElementById('tool-output');
+            output.innerHTML = `
+                <div style="margin-top: 1rem; padding: 1rem; background: #f1f5f9; border-radius: 6px;">
+                    <h5 style="margin-bottom: 0.5rem;">🌱 Fertilizer Calculator</h5>
+                    <div style="margin-bottom: 0.5rem;">
+                        <label style="display: block; font-size: 0.9rem;">Field area (acres)</label>
+                        <input type="number" id="field-area" style="width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;" placeholder="e.g. 50" min="0">
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <label style="display: block; font-size: 0.9rem;">Nitrogen requirement (kg/ha)</label>
+                        <select id="nitrogen-req" style="width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+                            <option value="150">Low (150 kg/ha)</option>
+                            <option value="200" selected>Medium (200 kg/ha)</option>
+                            <option value="250">High (250 kg/ha)</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <label style="display: block; font-size: 0.9rem;">Fertilizer type</label>
+                        <select id="fert-type" style="width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+                            <option value="500">Compound (46-0-0) - £500/t</option>
+                            <option value="650" selected>Urea - £650/t</option>
+                            <option value="720">AN (34.5% N) - £720/t</option>
+                        </select>
+                    </div>
+                    <button onclick="calculateFertilizer()" class="btn" style="margin-top: 0.5rem;">Calculate</button>
+                    <div id="calc-result" style="margin-top: 1rem;"></div>
+                </div>
+            `;
+        }
+        
+        function showGrantChecker() {
+            const output = document.getElementById('tool-output');
+            output.innerHTML = `
+                <div style="margin-top: 1rem; padding: 1rem; background: #f1f5f9; border-radius: 6px;">
+                    <h5 style="margin-bottom: 0.5rem;">🏛️ Grant Eligibility Checker</h5>
+                    <div style="margin-bottom: 0.5rem;">
+                        <label style="display: block; font-size: 0.9rem;">Farm type</label>
+                        <select id="farm-type" style="width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+                            <option value="arable">Arable</option>
+                            <option value="livestock" selected>Livestock</option>
+                            <option value="mixed">Mixed</option>
+                            <option value="horticulture">Horticulture</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <label style="display: block; font-size: 0.9rem;">Farm size (hectares)</label>
+                        <input type="number" id="farm-size" style="width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;" placeholder="e.g. 100" min="0">
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <label style="display: block; font-size: 0.9rem;">Located in Priority Area?</label>
+                        <select id="priority-area" style="width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                    <button onclick="checkGrants()" class="btn" style="margin-top: 0.5rem;">Check Eligibility</button>
+                    <div id="grant-result" style="margin-top: 1rem;"></div>
+                </div>
+            `;
+        }
+        
+        function calculateFertilizer() {
+            const area = parseFloat(document.getElementById('field-area').value) || 0;
+            const nitrogen = parseFloat(document.getElementById('nitrogen-req').value);
+            const fertPrice = parseFloat(document.getElementById('fert-type').value);
+            
+            if (area <= 0) {
+                document.getElementById('calc-result').innerHTML = '<p style="color: #dc2626;">Please enter a valid field area</p>';
+                return;
+            }
+            
+            // Convert acres to hectares (1 acre = 0.4047 ha)
+            const areaHa = area * 0.4047;
+            
+            // Calculate nitrogen needed (kg)
+            const nitrogenNeeded = areaHa * nitrogen;
+            
+            // Calculate fertilizer needed (assuming 34.5% N in typical fertilizer)
+            const fertNeeded = nitrogenNeeded / 0.345;
+            
+            // Convert to tonnes
+            const fertNeededTonnes = fertNeeded / 1000;
+            
+            // Calculate cost
+            const cost = fertNeededTonnes * fertPrice;
+            
+            document.getElementById('calc-result').innerHTML = `
+                <div style="background: white; padding: 0.75rem; border-radius: 4px; border-left: 4px solid #22c55e;">
+                    <p><strong>📊 Results:</strong></p>
+                    <p>Field area: ${area.toFixed(1)} acres (${areaHa.toFixed(1)} ha)</p>
+                    <p>Nitrogen needed: ${nitrogenNeeded.toFixed(0)} kg</p>
+                    <p>Fertilizer needed: ${fertNeededTonnes.toFixed(1)} tonnes</p>
+                    <p><strong>Estimated cost: £${cost.toFixed(0)}</strong></p>
+                </div>
+            `;
+        }
+        
+        function checkGrants() {
+            const farmType = document.getElementById('farm-type').value;
+            const farmSize = parseFloat(document.getElementById('farm-size').value) || 0;
+            const priorityArea = document.getElementById('priority-area').value;
+            
+            if (farmSize <= 0) {
+                document.getElementById('grant-result').innerHTML = '<p style="color: #dc2626;">Please enter a valid farm size</p>';
+                return;
+            }
+            
+            let eligible = [];
+            
+            // Basic eligibility rules
+            if (farmSize >= 5) eligible.push('SFI - Sustainable Farming Incentive');
+            if (farmType === 'livestock' || farmType === 'mixed') eligible.push('Animal Health & Welfare Grant');
+            if (priorityArea === 'yes') eligible.push('Local Nature Recovery Scheme');
+            if (farmType === 'arable' && farmSize >= 20) eligible.push('Farming Investment Fund (FIF)');
+            if (farmType === 'horticulture') eligible.push('Horticulture Resilience Scheme');
+            if (farmSize >= 100) eligible.push('Countryside Stewardship');
+            
+            let result = '';
+            if (eligible.length > 0) {
+                result = `
+                    <div style="background: white; padding: 0.75rem; border-radius: 4px; border-left: 4px solid #22c55e;">
+                        <p><strong>✅ Eligible for:</strong></p>
+                        <ul style="margin: 0; padding-left: 1rem;">
+                            ${eligible.map(g => `<li>${g}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            } else {
+                result = `
+                    <div style="background: white; padding: 0.75rem; border-radius: 4px; border-left: 4px solid #dc2626;">
+                        <p><strong>❌ Not eligible</strong></p>
+                        <p>Consider speaking to a local advisor to explore other options.</p>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('grant-result').innerHTML = result;
+        }
     </script>
 </body>
 </html>
