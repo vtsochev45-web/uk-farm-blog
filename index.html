@@ -3,67 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK Farm Brief - Live Data</title>
+    <title>UK Farm Brief - Daily Farming Intelligence</title>
     <style>
-        :root { --farm-green: #2d5a27; --alert: #dc2626; --money: #16a34a; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: system-ui, sans-serif; line-height: 1.6; background: #f5f5f4; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
-        header { background: var(--farm-green); color: white; padding: 2rem; text-align: center; }
-        .widget { background: white; border-radius: 8px; padding: 1.5rem; margin: 1rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .widget h3 { color: var(--farm-green); margin-bottom: 1rem; }
-        button { background: var(--farm-green); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
-        .loading { color: #666; }
-        .error { color: var(--alert); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f9fa; }
+        
+        /* Header */
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 1.8rem; font-weight: 800; }
+        .logo span { color: #22c55e; }
+        .nav { display: flex; gap: 2rem; }
+        .nav a { color: #cbd5e1; text-decoration: none; font-size: 0.95rem; }
+        .nav a:hover { color: white; }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #166534 0%, #22c55e 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        .hero h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.1rem; opacity: 0.95; }
+        
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 3px solid #22c55e;
+        }
+        .card-header h3 { color: #0f172a; font-size: 1.1rem; }
+        
+        .card-body { padding: 1.5rem; }
+        
+        /* Weather Widget */
+        .weather-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .weather-item:last-child { border-bottom: none; }
+        .temp { font-weight: 700; color: #166534; }
+        .alert { color: #dc2626; font-size: 0.85rem; }
+        
+        /* Price Ticker */
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .price-up { color: #16a34a; }
+        .price-down { color: #dc2626; }
+        
+        /* Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+        
+        .widget {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .widget h4 { color: #0f172a; margin-bottom: 1rem; font-size: 1rem; }
+        
+        .btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+        }
+        .btn:hover { background: #16a34a; }
+        
+        /* Loading */
+        .loading { color: #64748b; font-style: italic; }
+        
+        /* Footer */
+        .footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .container { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>🚜 UK Farm Brief</h1>
-        <p>Live Weather, Prices & Grants</p>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🚜 UK <span>Farm</span> Brief</div>
+            <nav class="nav">
+                <a href="#weather">Weather</a>
+                <a href="#prices">Prices</a>
+                <a href="#grants">Grants</a>
+                <a href="#markets">Markets</a>
+            </nav>
+        </div>
     </header>
+    
     <div class="container">
-        <div class="widget">
-            <h3>🌦 Weather</h3>
-            <div id="weather">Click refresh to load</div>
-            <button onclick="loadWeather()">Refresh Weather</button>
-        </div>
-        <div class="widget">
-            <h3>💰 Prices</h3>
-            <div id="prices">Click refresh to load</div>
-            <button onclick="loadPrices()">Refresh Prices</button>
-        </div>
+        <main>
+            <div class="hero">
+                <h1>Today's Farming Intelligence</h1>
+                <p>Live weather alerts, commodity prices, and grant updates for UK farmers. Updated every 2 hours with real-time data.</p>
+            </div>
+            
+            <div class="news-grid">
+                <div class="card" id="weather">
+                    <div class="card-header">
+                        <h3>🌦 Live Weather</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="weather-data" class="loading">Loading weather...</div>
+                        <button class="btn" onclick="loadWeather()" style="margin-top: 1rem;">Refresh Weather</button>
+                    </div>
+                </div>
+                
+                <div class="card" id="prices">
+                    <div class="card-header">
+                        <h3>💰 Commodity Prices</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="prices-data" class="loading">Loading prices...</div>
+                        <button class="btn" onclick="loadPrices()" style="margin-top: 1rem;">Refresh Prices</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📰 Daily Brief</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Scotland:</strong> Heavy rain warning - field work suspended</p>
+                        <p><strong>Midlands:</strong> Frost risk tonight - protect crops</p>
+                        <p><strong>Grants:</strong> FIF deadline 31 March - £25k-£500k available</p>
+                        <p style="margin-top: 1rem; color: #64748b;">Updated: 24 Feb 2026</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <aside class="sidebar">
+            <div class="widget">
+                <h4>🔥 Trending</h4>
+                <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Spring drilling preparation guide</p>
+                <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">SFI payment changes explained</p>
+                <p style="font-size: 0.9rem;">New livestock welfare rules</p>
+            </div>
+            
+            <div class="widget">
+                <h4>💡 Quick Tools</h4>
+                <button class="btn" style="margin-bottom: 0.5rem;">Grant Eligibility Checker</button>
+                <button class="btn" style="background: #3b82f6;">Fertilizer Calculator</button>
+            </div>
+            
+            <div class="widget">
+                <h4>📊 Market Summary</h4>
+                <p style="font-size: 0.9rem;">Wheat firming on export demand</p>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Lamb prices up 8% this week</p>
+            </div>
+        </aside>
     </div>
+    
+    <footer class="footer">
+        <p>UK Farm Brief © 2026 | Powered by real-time data</p>
+    </footer>
+    
     <script>
+        const API_BASE = window.location.origin;
+        
         async function loadWeather() {
-            document.getElementById('weather').innerHTML = '<div class="loading">Loading...</div>';
+            const el = document.getElementById('weather-data');
+            el.innerHTML = '<div class="loading">Loading...</div>';
+            
             try {
-                const res = await fetch('/api/weather');
+                const res = await fetch(`${API_BASE}/api/weather`);
                 const data = await res.json();
                 let html = '';
-                for (const [r, w] of Object.entries(data.data)) {
-                    html += `<p><strong>${r}:</strong> ${w.temp}°C, ${w.condition}</p>`;
+                for (const [region, w] of Object.entries(data.data)) {
+                    html += `
+                        <div class="weather-item">
+                            <span><strong>${region.charAt(0).toUpperCase() + region.slice(1)}</strong></span>
+                            <span class="temp">${w.temp}°C ${w.condition}</span>
+                        </div>
+                        ${w.alert ? `<div class="alert">⚠️ ${w.alert}</div>` : ''}
+                    `;
                 }
-                document.getElementById('weather').innerHTML = html;
+                el.innerHTML = html;
             } catch (e) {
-                document.getElementById('weather').innerHTML = '<div class="error">Error loading weather</div>';
+                el.innerHTML = '<div style="color: #dc2626;">Error loading weather. Retrying...</div>';
+                setTimeout(loadWeather, 3000);
             }
         }
+        
         async function loadPrices() {
-            document.getElementById('prices').innerHTML = '<div class="loading">Loading...</div>';
+            const el = document.getElementById('prices-data');
+            el.innerHTML = '<div class="loading">Loading...</div>';
+            
             try {
-                const res = await fetch('/api/prices');
+                const res = await fetch(`${API_BASE}/api/prices`);
                 const data = await res.json();
                 let html = '';
                 for (const [item, p] of Object.entries(data.data)) {
-                    html += `<p><strong>${item}:</strong> ${p.price} ${p.unit}</p>`;
+                    const changeClass = p.change > 0 ? 'price-up' : p.change < 0 ? 'price-down' : '';
+                    const arrow = p.change > 0 ? '↑' : p.change < 0 ? '↓' : '→';
+                    html += `
+                        <div class="price-item">
+                            <span><strong>${item.charAt(0).toUpperCase() + item.slice(1)}</strong></span>
+                            <span class="${changeClass}">${p.price} ${p.unit} ${arrow}</span>
+                        </div>
+                    `;
                 }
-                document.getElementById('prices').innerHTML = html;
+                el.innerHTML = html;
             } catch (e) {
-                document.getElementById('prices').innerHTML = '<div class="error">Error loading prices</div>';
+                el.innerHTML = '<div style="color: #dc2626;">Error loading prices. Retrying...</div>';
+                setTimeout(loadPrices, 3000);
             }
         }
-        // Auto-load on page load
+        
+        // Auto-load
         loadWeather();
         loadPrices();
     </script>

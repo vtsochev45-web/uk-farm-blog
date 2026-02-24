@@ -2,18 +2,30 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/**/*.py",
+      "src": "api/weather.py",
       "use": "@vercel/python"
     },
     {
-      "src": "index.html",
-      "use": "@vercel/static"
+      "src": "api/prices.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "api/grants.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "src": "/api/weather",
+      "dest": "/api/weather.py"
+    },
+    {
+      "src": "/api/prices",
+      "dest": "/api/prices.py"
+    },
+    {
+      "src": "/api/grants",
+      "dest": "/api/grants.py"
     },
     {
       "src": "/(.*)",
